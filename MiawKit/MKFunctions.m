@@ -46,14 +46,12 @@ NSString *MKLocalized(NSString *str) {
 }
 
 NSString *MKLocalizedFromTable(NSString *str, NSString *table) {
-	NSString *languageCode = MKLocalizationPreferredLanguage();
-	NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:languageCode ofType:@"lproj"]];
-	
+	NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:MKLocalizationPreferredLanguage() ofType:@"lproj"]];
 	NSString *string = [bundle localizedStringForKey:str value:MK_NOT_AVAILABLE table:table];
 	
 	if (!string || [string isEqualToString:MK_NOT_AVAILABLE]) {
-		NSString *path = [[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"];
-		return [[NSBundle bundleWithPath:path] localizedStringForKey:str value:nil table:table];
+		bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"]];
+		return [bundle localizedStringForKey:str value:nil table:table];
 	}
 	
     return string;
