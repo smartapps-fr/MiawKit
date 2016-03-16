@@ -10,9 +10,12 @@
 
 #import "MKFunctions.h"
 
+BOOL MKLocalizationIsPreferredLanguageSet = false;
+
 void MKLocalizationSetPreferredLanguage(NSString *language) {
 	[[NSUserDefaults standardUserDefaults] setObject:@[ language ] forKey:@"AppleLanguages"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
+	MKLocalizationIsPreferredLanguageSet = true;
 }
 
 NSString *MKLocalizationNameForPrefferedLanguage(void) {
@@ -31,7 +34,11 @@ NSString *MKLocalizationNameForLanguageInLanguage(NSString *language, NSString *
 }
 
 NSString *MKLocalizationPreferredLanguage(void) {
-	return [[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] firstObject];
+	if (MKLocalizationIsPreferredLanguageSet) {
+		return [[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] firstObject];
+	} else {
+		return [[[NSBundle mainBundle] preferredLocalizations] firstObject];
+	}
 }
 
 NSString *MKLocalized(NSString *str) {
@@ -39,7 +46,7 @@ NSString *MKLocalized(NSString *str) {
 }
 
 NSString *MKLocalizedFromTable(NSString *str, NSString *table) {
-	NSString *languageCode = [[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] firstObject];
+	NSString *languageCode = MKLocalizationPreferredLanguage();
 	NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:languageCode ofType:@"lproj"]];
 	
 	NSString *string = [bundle localizedStringForKey:str value:MK_NOT_AVAILABLE table:table];
