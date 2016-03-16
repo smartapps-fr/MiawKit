@@ -11,11 +11,16 @@
 #import "MKFunctions.h"
 
 BOOL MKLocalizationIsPreferredLanguageSet = false;
+NSString __strong *MKLocalizationFallbackLanguage = @"en";
 
 void MKLocalizationSetPreferredLanguage(NSString *language) {
 	[[NSUserDefaults standardUserDefaults] setObject:@[ language ] forKey:@"AppleLanguages"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 	MKLocalizationIsPreferredLanguageSet = true;
+}
+
+void MKLocalizationSetFallbackLanguage(NSString *language) {
+	MKLocalizationFallbackLanguage = language;
 }
 
 NSString *MKLocalizationNameForPrefferedLanguage(void) {
@@ -50,7 +55,7 @@ NSString *MKLocalizedFromTable(NSString *str, NSString *table) {
 	NSString *string = [bundle localizedStringForKey:str value:MK_NOT_AVAILABLE table:table];
 	
 	if (!string || [string isEqualToString:MK_NOT_AVAILABLE]) {
-		bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"]];
+		bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:MKLocalizationFallbackLanguage ofType:@"lproj"]];
 		return [bundle localizedStringForKey:str value:nil table:table];
 	}
 	

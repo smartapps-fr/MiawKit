@@ -23,6 +23,13 @@ NSString *MKLocalizationPreferredLanguage(void);
 void MKLocalizationSetPreferredLanguage(NSString *language);
 
 /*!
+ * Change the fallback language used by MKLocalizedFromTable.
+ * @see MKLocalizedFromTable
+ * @param language The new fallback language
+ */
+void MKLocalizationSetFallbackLanguage(NSString *language);
+
+/*!
  * Get the fully qualified name for a given language identifier.
  * e.g. given the identifier "da" the answer will be "Dansk"
  * @param language The identifier for the language
@@ -61,8 +68,9 @@ NSString *MKLocalized(NSString *str);
  * given key residing in the specified table.
  * @param str The key for the localized string
  * @param table The table to search. If nil, the Localizable.strings table is searched
+ * @see MKLocalizationSetFallbackLanguage
  * @return The formatted localized string. If no string is found for the preferred language
- * a version in english is returned. If none exists it will return nil.
+ * a version for the fallback language is returned. If none exists it will return nil.
  * @discussion The preferred use of this is to only pass in strings defined in the header generated with the miaw tool.
  */
 NSString *MKLocalizedFromTable(NSString *str, NSString *table);
