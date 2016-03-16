@@ -23,6 +23,11 @@ NSString *MKLocalizationPreferredLanguage(void);
 void MKLocalizationSetPreferredLanguage(NSString *language);
 
 /*!
+ * Remove preferred language from settings. Get back to default behaviour.
+ */
+void MKLocalizationRemovePreferredLanguage();
+
+/*!
  * Change the fallback language used by MKLocalizedFromTable.
  * @see MKLocalizedFromTable
  * @param language The new fallback language

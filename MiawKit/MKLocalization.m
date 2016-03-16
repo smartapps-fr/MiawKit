@@ -59,8 +59,12 @@
 }
 
 + (void)changeLocalizationTo:(NSString *)language {
-	MKLocalizationSetPreferredLanguage(language);
-	
+	if (language) {
+		MKLocalizationSetPreferredLanguage(language);
+	} else {
+		MKLocalizationRemovePreferredLanguage();
+	}
+
 	for (id<MKLocalizable> localizableObject in [[self sharedInstance] localizables]) {
 		[localizableObject shouldLocalize];
 	}

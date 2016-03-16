@@ -10,13 +10,18 @@
 
 #import "MKFunctions.h"
 
-BOOL MKLocalizationIsPreferredLanguageSet = false;
+#define MK_SETTING_KEY @"MiawKitLanguage"
+
 NSString __strong *MKLocalizationFallbackLanguage = @"en";
 
 void MKLocalizationSetPreferredLanguage(NSString *language) {
-	[[NSUserDefaults standardUserDefaults] setObject:@[ language ] forKey:@"AppleLanguages"];
+	[[NSUserDefaults standardUserDefaults] setObject:language forKey:MK_SETTING_KEY];
 	[[NSUserDefaults standardUserDefaults] synchronize];
-	MKLocalizationIsPreferredLanguageSet = true;
+}
+
+void MKLocalizationRemovePreferredLanguage() {
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:MK_SETTING_KEY];
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 void MKLocalizationSetFallbackLanguage(NSString *language) {
@@ -39,8 +44,9 @@ NSString *MKLocalizationNameForLanguageInLanguage(NSString *language, NSString *
 }
 
 NSString *MKLocalizationPreferredLanguage(void) {
-	if (MKLocalizationIsPreferredLanguageSet) {
-		return [[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] firstObject];
+	NSString *languageSetting = [[NSUserDefaults standardUserDefaults] objectForKey:MK_SETTING_KEY];
+	if ([languageSetting length] > 0) {
+		return languageSetting;
 	} else {
 		return [[[NSBundle mainBundle] preferredLocalizations] firstObject];
 	}
