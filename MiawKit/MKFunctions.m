@@ -57,15 +57,19 @@ NSString *MKLocalized(NSString *str) {
 }
 
 NSString *MKLocalizedFromTable(NSString *str, NSString *table) {
-	NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:MKLocalizationPreferredLanguage() ofType:@"lproj"]];
-	NSString *string = [bundle localizedStringForKey:str value:MK_NOT_AVAILABLE table:table];
-	
+	return MKLocalizedFromTableBundle(str, table, [NSBundle mainBundle]);
+}
+
+NSString *MKLocalizedFromTableBundle(NSString *str, NSString *table, NSBundle *bundle) {
+	NSBundle *localization_bundle = [NSBundle bundleWithPath:[bundle pathForResource:MKLocalizationPreferredLanguage() ofType:@"lproj"]];
+	NSString *string = [localization_bundle localizedStringForKey:str value:MK_NOT_AVAILABLE table:table];
+
 	if (!string || [string isEqualToString:MK_NOT_AVAILABLE]) {
-		bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:MKLocalizationFallbackLanguage ofType:@"lproj"]];
-		return [bundle localizedStringForKey:str value:nil table:table];
+		localization_bundle = [NSBundle bundleWithPath:[bundle pathForResource:MKLocalizationFallbackLanguage ofType:@"lproj"]];
+		return [localization_bundle localizedStringForKey:str value:nil table:table];
 	}
-	
-    return string;
+
+	return string;
 }
 
 NSString *MKLocalizedWithFormat(NSString *str, ...) {

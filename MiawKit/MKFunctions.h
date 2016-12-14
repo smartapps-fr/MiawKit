@@ -81,6 +81,19 @@ NSString *MKLocalized(NSString *str);
 NSString *MKLocalizedFromTable(NSString *str, NSString *table);
 
 /*!
+ * Get a localized version of the string for the
+ * given key residing in the specified table and specified bundle.
+ * @param str The key for the localized string
+ * @param table The table to search. If nil, the Localizable.strings table is searched
+ * @param bundle The bundle to search for localizations files
+ * @see MKLocalizationSetFallbackLanguage
+ * @return The formatted localized string. If no string is found for the preferred language
+ * a version for the fallback language is returned. If none exists it will return nil.
+ * @discussion The preferred use of this is to only pass in strings defined in the header generated with the miaw tool.
+ */
+NSString *MKLocalizedFromTableBundle(NSString *str, NSString *table, NSBundle *bundle);
+
+/*!
  * Get a formatted localized version of the string for the
  * given key.
  * @param str The key for the localized string
